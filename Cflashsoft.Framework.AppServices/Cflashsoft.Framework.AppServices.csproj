@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>C. Moya</Authors>
+    <Company>C-Flash Software</Company>
+    <Product>Cflashsoft Framework</Product>
+    <Description>Unit of Work (UoW) framework that is database and backend agnostic.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Cflashsoft.Framework.AppServices.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Cflashsoft.Framework.AppServices.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cflashsoft.Framework.Types\Cflashsoft.Framework.Types.csproj" />
+  </ItemGroup>
+
+</Project>

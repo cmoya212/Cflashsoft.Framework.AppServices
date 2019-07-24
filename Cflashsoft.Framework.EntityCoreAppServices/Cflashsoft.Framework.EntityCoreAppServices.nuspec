@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>1.0.63</version>
+    <title>$title$</title>
+    <authors>C. Moya</authors>
+    <owners>cmoya212</owners>
+    <projectUrl>https://www.nuget.org/packages/Cflashsoft.Framework.EntityCoreAppServices</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Unit-of-work (UoW) base classes for Entity Framework Core services.</description>
+    <releaseNotes>This release contains all updates through $date$</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <dependencies>
+      <dependency id="Cflashsoft.Framework.AppServices" version="1.0.63" exclude="Build,Analyzers" />
+      <dependency id="Cflashsoft.Framework.Types" version="1.0.63" exclude="Build,Analyzers" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Authors>C. Moya</Authors>
+    <Company>C-Flash Software</Company>
+    <Product>Cflashsoft Framework</Product>
+    <Description>Unit-of-work (UoW) base classes for Entity Framework Core services.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp2.1\Cflashsoft.Framework.EntityCoreAppServices.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp2.1\Cflashsoft.Framework.EntityCoreAppServices.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cflashsoft.Framework.AppServices\Cflashsoft.Framework.AppServices.csproj" />
+    <ProjectReference Include="..\Cflashsoft.Framework.Types\Cflashsoft.Framework.Types.csproj" />
+  </ItemGroup>
+
+</Project>
