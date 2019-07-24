@@ -7,30 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cflashsoft.Framework.AppSer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cflashsoft.Framework.Types", "Cflashsoft.Framework.Types\Cflashsoft.Framework.Types.csproj", "{D0EDDDBA-DB4F-4A7A-BC69-3DFD591865AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cflashsoft.Framework.Security", "Cflashsoft.Framework.Security\Cflashsoft.Framework.Security.csproj", "{73B7C001-0BDA-4710-A205-F7BEB833A180}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cflashsoft.Framework.WcfAppServices", "Cflashsoft.Framework.WcfAppServices\Cflashsoft.Framework.WcfAppServices.csproj", "{23EE5436-1748-48DF-930E-0A11E91C97C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cflashsoft.Framework.EntityAppServices", "Cflashsoft.Framework.EntityAppServices\Cflashsoft.Framework.EntityAppServices.csproj", "{3DDF593E-D166-4DF0-9FA4-7EE44347E8F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cflashsoft.Framework.Web.WebUtility", "Cflashsoft.Framework.Web.WebUtility\Cflashsoft.Framework.Web.WebUtility.csproj", "{3264DA8B-469B-43FD-855C-944BE3FAE966}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cflashsoft.Framework.SqlUtility", "Cflashsoft.Framework.SqlUtility\Cflashsoft.Framework.SqlUtility.csproj", "{CF3336AC-796A-4E04-BDAF-86F8BA86DB55}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cflashsoft.Framework.EntityCoreAppServices", "Cflashsoft.Framework.EntityCoreAppServices\Cflashsoft.Framework.EntityCoreAppServices.csproj", "{9E30C09C-99A1-488D-93E4-EE9E4B83ED6A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cflashsoft.Framework.SecurityCore", "Cflashsoft.Framework.SecurityCore\Cflashsoft.Framework.SecurityCore.csproj", "{A5E1506B-F571-4F8B-9EBB-8E606BD8AA49}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cflashshoft.Framework.Optimization", "Cflashshoft.Framework.Optimization\Cflashshoft.Framework.Optimization.csproj", "{AD692E9C-37CC-492D-89EE-611D10DCA895}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cflashsoft.Framework.Http", "Cflashsoft.Framework.Http\Cflashsoft.Framework.Http.csproj", "{48296645-05A6-4571-AEEA-F74D3B15A4F3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NugetPack", "NugetPack", "{03FFA23A-BB10-4BE9-8CF1-323ECEBB3F89}"
 	ProjectSection(SolutionItems) = preProject
 		nugetpack.bat = nugetpack.bat
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cflashsoft.Framework.AspNetCore.Identity", "Cflashsoft.Framework.AspNetCore.Identity\Cflashsoft.Framework.AspNetCore.Identity.csproj", "{FAD66AFC-27EC-4253-977C-B4965DE6FE6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,10 +32,6 @@ Global
 		{D0EDDDBA-DB4F-4A7A-BC69-3DFD591865AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0EDDDBA-DB4F-4A7A-BC69-3DFD591865AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0EDDDBA-DB4F-4A7A-BC69-3DFD591865AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73B7C001-0BDA-4710-A205-F7BEB833A180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73B7C001-0BDA-4710-A205-F7BEB833A180}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73B7C001-0BDA-4710-A205-F7BEB833A180}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73B7C001-0BDA-4710-A205-F7BEB833A180}.Release|Any CPU.Build.0 = Release|Any CPU
 		{23EE5436-1748-48DF-930E-0A11E91C97C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{23EE5436-1748-48DF-930E-0A11E91C97C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23EE5436-1748-48DF-930E-0A11E91C97C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,34 +40,10 @@ Global
 		{3DDF593E-D166-4DF0-9FA4-7EE44347E8F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DDF593E-D166-4DF0-9FA4-7EE44347E8F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DDF593E-D166-4DF0-9FA4-7EE44347E8F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3264DA8B-469B-43FD-855C-944BE3FAE966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3264DA8B-469B-43FD-855C-944BE3FAE966}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3264DA8B-469B-43FD-855C-944BE3FAE966}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3264DA8B-469B-43FD-855C-944BE3FAE966}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF3336AC-796A-4E04-BDAF-86F8BA86DB55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF3336AC-796A-4E04-BDAF-86F8BA86DB55}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF3336AC-796A-4E04-BDAF-86F8BA86DB55}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF3336AC-796A-4E04-BDAF-86F8BA86DB55}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9E30C09C-99A1-488D-93E4-EE9E4B83ED6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9E30C09C-99A1-488D-93E4-EE9E4B83ED6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E30C09C-99A1-488D-93E4-EE9E4B83ED6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E30C09C-99A1-488D-93E4-EE9E4B83ED6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5E1506B-F571-4F8B-9EBB-8E606BD8AA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5E1506B-F571-4F8B-9EBB-8E606BD8AA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5E1506B-F571-4F8B-9EBB-8E606BD8AA49}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5E1506B-F571-4F8B-9EBB-8E606BD8AA49}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD692E9C-37CC-492D-89EE-611D10DCA895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD692E9C-37CC-492D-89EE-611D10DCA895}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD692E9C-37CC-492D-89EE-611D10DCA895}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD692E9C-37CC-492D-89EE-611D10DCA895}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48296645-05A6-4571-AEEA-F74D3B15A4F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48296645-05A6-4571-AEEA-F74D3B15A4F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48296645-05A6-4571-AEEA-F74D3B15A4F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48296645-05A6-4571-AEEA-F74D3B15A4F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAD66AFC-27EC-4253-977C-B4965DE6FE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAD66AFC-27EC-4253-977C-B4965DE6FE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAD66AFC-27EC-4253-977C-B4965DE6FE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAD66AFC-27EC-4253-977C-B4965DE6FE6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
