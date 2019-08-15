@@ -64,10 +64,10 @@ namespace Cflashsoft.Framework.AppServices
         }
 
         private bool _disposed = false;
-        private AppOptions _options = null;
+        internal AppOptions _options = null;
         private object _reusableAppServicesSyncRoot = new object();
         private object _sharedObjectsSyncRoot = new object();
-        private OptionsDictionary<Type, AppServicesBase> _reusableAppServices = new OptionsDictionary<Type, AppServicesBase>();
+        internal OptionsDictionary<Type, AppServicesBase> _reusableAppServices = new OptionsDictionary<Type, AppServicesBase>();
         private OptionsDictionary<Type, SharedObjectEntry> _sharedObjects = new OptionsDictionary<Type, SharedObjectEntry>();
         private OptionsDictionary<Type, object> _lastSaveResults = new OptionsDictionary<Type, object>();
         private List<ErrorResult> _lastSaveErrors = new List<ErrorResult>();
@@ -179,6 +179,63 @@ namespace Cflashsoft.Framework.AppServices
                 result = new T();
                 result.InitializeAppService(this);
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Create a new UoW app service in this context.
+        /// </summary>
+        public AppServicesBase GetAppService(Type appServiceType)
+        {
+            if (this.AllowedAppServiceTypes != null && !this.AllowedAppServiceTypes.Contains(appServiceType))
+                throw new InvalidOperationException("App service of this type is not allowed in this app context.");
+
+            AppServicesBase result = null;
+
+            if (appServiceType.IsInterface)
+            {
+                result = _reusableAppServices[appServiceType];
+            }
+            else
+            {
+                if (appServiceType.IsAssignableFrom(typeof(AppServicesBase)))
+                {
+                    ReusableInContextAppServiceAttribute reusableInContextAttribute = Attribute.GetCustomAttribute(appServiceType, typeof(ReusableInContextAppServiceAttribute)) as ReusableInContextAppServiceAttribute;
+
+                    if (reusableInContextAttribute != null)
+                    {
+                        result = _reusableAppServices[appServiceType];
+
+                        if (result == null)
+                        {
+                            lock (_reusableAppServicesSyncRoot)
+                            {
+                                result = _reusableAppServices[appServiceType];
+
+                                if (result == null)
+                                {
+                                    result = (AppServicesBase)Activator.CreateInstance(appServiceType);
+                                    _reusableAppServices.Add(appServiceType, result);
+                                    result.InitializeAppService(this);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result = (AppServicesBase)Activator.CreateInstance(appServiceType);
+                        result.InitializeAppService(this);
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException("The requested type is not an interface or an AppServiceBase derived type.");
+                }
+            }
+
+            if (result == null)
+                throw new KeyNotFoundException("The requested app service does not exist.");
 
             return result;
         }
