@@ -13,57 +13,10 @@ namespace Cflashsoft.Framework.AppServices
     /// </summary>
     public abstract class AppContextBase : IDisposable
     {
-        private static ErrorLoggerBase _errorLogger = new TraceErrorLogger();
-        private static AuditLoggerBase _auditLogger = new TraceAuditLogger();
-        private static Action<Action> _backgroundAction = (Action action) => ThreadPool.QueueUserWorkItem(a => action());
-
-        /// <summary>
-        /// Queues a method for execution. By default, the method executes when a thread pool thread becomes available, but parent applications can override this by specifying a different action using AppContext.SetDefaults(...).
-        /// </summary>
-        public static void QueueBackgroundAction(Action action)
-        {
-            _backgroundAction(action);
-        }
-
-        /// <summary>
-        /// Provides logging services. NOTE: this error logger is static and does not share a state or connections with the app context.
-        /// </summary>
-        public static ErrorLoggerBase ErrorLogger
-        {
-            get
-            {
-                return _errorLogger;
-            }
-        }
-
-        /// <summary>
-        /// Provides audit logging services. NOTE: this audit logger is static and does not share a state or connections with the app context.
-        /// </summary>
-        public static AuditLoggerBase AuditLogger
-        {
-            get
-            {
-                return _auditLogger;
-            }
-        }
-
-        /// <summary>
-        /// Set default settings that will be used across the application.
-        /// </summary>
-        /// <param name="errorLogger">The default stateless error logger that can be used by app services and the parent application to log errors. If null, the default error logger will output to the console or trace listeners.</param>
-        /// <param name="auditLogger">The default stateless audit logger that can be used by app services and the parent application to log an audit trail. If null, the default audit logger will output to the console or trace listeners.</param>
-        /// <param name="backgroundAction">If null, the default mechanism, ThreadPool.QueueUserWorkItem, is used. NOTE: ASP.NET applications should use (Action action) => HostingEnvironment.QueueBackgroundWorkItem(a => action()). Otherwise, background threads spawned using AppContext.QueueBackgroundAction are subject to AppPool teardowns and may never complete.</param>
-        protected static void SetDefaults(ErrorLoggerBase errorLogger, AuditLoggerBase auditLogger, Action<Action> backgroundAction)
-        {
-            if (errorLogger != null)
-                _errorLogger = errorLogger;
-            if (auditLogger != null)
-                _auditLogger = auditLogger;
-            if (backgroundAction != null)
-                _backgroundAction = backgroundAction;
-        }
-
         private bool _disposed = false;
+        internal ErrorLoggerBase _errorLogger = null;
+        internal AuditLoggerBase _auditLogger = null;
+        internal Action<Action> _backgroundAction = null;
         internal AppOptions _options = null;
         private object _reusableAppServicesSyncRoot = new object();
         private object _sharedObjectsSyncRoot = new object();
@@ -80,36 +33,44 @@ namespace Cflashsoft.Framework.AppServices
         /// <summary>
         /// A collection of custom options that can be used by AppService UoW classes for application specific purposes.
         /// </summary>
-        public AppOptions Options
-        {
-            get
-            {
-                return _options;
-            }
-        }
+        public AppOptions Options => _options;
+
+        /// <summary>
+        /// Provides logging services. NOTE: this error logger is static and does not share a state or connections with the app context.
+        /// </summary>
+        public ErrorLoggerBase ErrorLogger => _errorLogger;
+
+        /// <summary>
+        /// Provides audit logging services. NOTE: this audit logger is static and does not share a state or connections with the app context.
+        /// </summary>
+        public AuditLoggerBase AuditLogger => _auditLogger;
 
         /// <summary>
         /// Inititializes a new instance of the AppContext class.
         /// </summary>
-        public AppContextBase() 
-            : this(new AppOptions())
-        {
-
-        }
+        public AppContextBase()
+            : this(null, null, null, new AppOptions())
+        { }
 
         /// <summary>
         /// Inititializes a new instance of the AppContext class.
         /// </summary>
-        public AppContextBase(AppOptions options)
+        public AppContextBase(ErrorLoggerBase errorLogger, AuditLoggerBase auditLogger, Action<Action> backgroundAction, AppOptions options)
         {
+            _errorLogger = errorLogger ?? new TraceErrorLogger();
+            _auditLogger = auditLogger ?? new TraceAuditLogger();
+            _backgroundAction = backgroundAction != null ? backgroundAction : (Action action) => ThreadPool.QueueUserWorkItem(a => action());
             _options = options ?? new AppOptions();
         }
 
         /// <summary>
         /// Inititializes a new instance of the AppContext class.
         /// </summary>
-        public AppContextBase(params KeyValuePair<string, object>[] options)
-            : this(new AppOptions())
+        /// <param name="errorLogger">The default stateless error logger that can be used by app services and the parent application to log errors. If null, the default error logger will output to the console or trace listeners.</param>
+        /// <param name="auditLogger">The default stateless audit logger that can be used by app services and the parent application to log an audit trail. If null, the default audit logger will output to the console or trace listeners.</param>
+        /// <param name="backgroundAction">If null, the default mechanism, ThreadPool.QueueUserWorkItem, is used. NOTE: ASP.NET applications should use (Action action) => HostingEnvironment.QueueBackgroundWorkItem(a => action()). Otherwise, background threads spawned using AppContext.QueueBackgroundAction are subject to AppPool teardowns and may never complete.</param>
+        public AppContextBase(ErrorLoggerBase errorLogger, AuditLoggerBase auditLogger, Action<Action> backgroundAction, params KeyValuePair<string, object>[] options)
+            : this(errorLogger, auditLogger, backgroundAction, new AppOptions())
         {
             foreach (KeyValuePair<string, object> option in options)
             {
@@ -120,8 +81,11 @@ namespace Cflashsoft.Framework.AppServices
         /// <summary>
         /// Inititializes a new instance of the AppContext class.
         /// </summary>
-        public AppContextBase(params IEnumerable<KeyValuePair<string, object>>[] optionsLists)
-            : this(new AppOptions())
+        /// <param name="errorLogger">The default stateless error logger that can be used by app services and the parent application to log errors. If null, the default error logger will output to the console or trace listeners.</param>
+        /// <param name="auditLogger">The default stateless audit logger that can be used by app services and the parent application to log an audit trail. If null, the default audit logger will output to the console or trace listeners.</param>
+        /// <param name="backgroundAction">If null, the default mechanism, ThreadPool.QueueUserWorkItem, is used. NOTE: ASP.NET applications should use (Action action) => HostingEnvironment.QueueBackgroundWorkItem(a => action()). Otherwise, background threads spawned using AppContext.QueueBackgroundAction are subject to AppPool teardowns and may never complete.</param>
+        public AppContextBase(ErrorLoggerBase errorLogger, AuditLoggerBase auditLogger, Action<Action> backgroundAction, params IEnumerable<KeyValuePair<string, object>>[] optionsLists)
+            : this(errorLogger, auditLogger, backgroundAction, new AppOptions())
         {
             foreach (IEnumerable<KeyValuePair<string, object>> optionsList in optionsLists)
             {
@@ -135,11 +99,12 @@ namespace Cflashsoft.Framework.AppServices
         /// <summary>
         /// Inititializes a new instance of the AppContext class.
         /// </summary>
-        public AppContextBase(IEnumerable<KeyValuePair<string, object>> options)
-            : this(new AppOptions(options))
-        {
-
-        }
+        /// <param name="errorLogger">The default stateless error logger that can be used by app services and the parent application to log errors. If null, the default error logger will output to the console or trace listeners.</param>
+        /// <param name="auditLogger">The default stateless audit logger that can be used by app services and the parent application to log an audit trail. If null, the default audit logger will output to the console or trace listeners.</param>
+        /// <param name="backgroundAction">If null, the default mechanism, ThreadPool.QueueUserWorkItem, is used. NOTE: ASP.NET applications should use (Action action) => HostingEnvironment.QueueBackgroundWorkItem(a => action()). Otherwise, background threads spawned using AppContext.QueueBackgroundAction are subject to AppPool teardowns and may never complete.</param>
+        public AppContextBase(ErrorLoggerBase errorLogger, AuditLoggerBase auditLogger, Action<Action> backgroundAction, IEnumerable<KeyValuePair<string, object>> options)
+            : this(errorLogger, auditLogger, backgroundAction, new AppOptions(options))
+        { }
 
         /// <summary>
         /// Create a new UoW app service in this context.
@@ -616,6 +581,14 @@ namespace Cflashsoft.Framework.AppServices
         }
 
         /// <summary>
+        /// Queues a method for execution. By default, the method executes when a thread pool thread becomes available, but parent applications can override this by specifying a different action using AppContext.SetDefaults(...).
+        /// </summary>
+        public void QueueBackgroundAction(Action action)
+        {
+            _backgroundAction(action);
+        }
+
+        /// <summary>
         /// Log an error in the store asynchronously.
         /// </summary>
         /// <param name="exception">The underlying exception of the error.</param>
@@ -625,7 +598,7 @@ namespace Cflashsoft.Framework.AppServices
         /// <param name="userId">The unique id of the user that caused the error.</param>
         /// <param name="userGuid">The unique id of the user that caused the error.</param>
         /// <param name="userInfo">The unique id of the user that caused the error.</param>
-        public static void QueueLogError(Exception exception, string info, short code, int applicationId, int? userId, Guid? userGuid, string userInfo)
+        public void QueueLogError(Exception exception, string info, short code, int applicationId, int? userId, Guid? userGuid, string userInfo)
         {
             QueueBackgroundAction(() => ErrorLogger.LogError(exception, info, code, applicationId, userId, userGuid, userInfo));
         }
@@ -643,7 +616,7 @@ namespace Cflashsoft.Framework.AppServices
         /// <param name="itemGuid">Guid id, if any, of the item being audited.</param>
         /// <param name="itemInfo">App defined id info (such as compound database primary key) identifying the item being audited.</param>
         /// <param name="notes">Additional information for the action being audited.</param>
-        public static void QueueLogAuditAction(AppAuditAction action, int applicationId, int? userId, Guid? userGuid, string userInfo, int? itemType, int? itemId, Guid? itemGuid, string itemInfo, string notes)
+        public void QueueLogAuditAction(AppAuditAction action, int applicationId, int? userId, Guid? userGuid, string userInfo, int? itemType, int? itemId, Guid? itemGuid, string itemInfo, string notes)
         {
             QueueBackgroundAction(() => AuditLogger.LogAction(action, applicationId, userId, userGuid, userInfo, itemType, itemId, itemGuid, itemInfo, notes));
         }
@@ -661,7 +634,7 @@ namespace Cflashsoft.Framework.AppServices
         /// <param name="itemGuid">Guid id, if any, of the item being audited.</param>
         /// <param name="itemInfo">App defined id info (such as compound database primary key) identifying the item being audited.</param>
         /// <param name="notes">Additional information for the action being audited.</param>
-        public static void QueueLogAuditAction(short action, int applicationId, int? userId, Guid? userGuid, string userInfo, int? itemType, int? itemId, Guid? itemGuid, string itemInfo, string notes)
+        public void QueueLogAuditAction(short action, int applicationId, int? userId, Guid? userGuid, string userInfo, int? itemType, int? itemId, Guid? itemGuid, string itemInfo, string notes)
         {
             QueueBackgroundAction(() => AuditLogger.LogAction(action, applicationId, userId, userGuid, userInfo, itemType, itemId, itemGuid, itemInfo, notes));
         }
@@ -675,9 +648,9 @@ namespace Cflashsoft.Framework.AppServices
         /// <param name="itemsInfo">A dictionary that contains information about the items to be audited.</param>
         /// <param name="items">The items to be audited.</param>
         /// <param name="notes">Additional information for the action being audited.</param>
-        public static void QueueLogAuditAction(AppAuditAction action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes)
+        public void QueueLogAuditAction(AppAuditAction action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes)
         {
-            QueueBackgroundAction(() => AuditLogger.LogActions(action, applicationId, userIdentifier, itemsInfo, items, notes, false));
+            QueueBackgroundAction(() => AuditLogger.LogActions(action, applicationId, userIdentifier, itemsInfo, items, notes));
         }
 
         /// <summary>
@@ -689,9 +662,9 @@ namespace Cflashsoft.Framework.AppServices
         /// <param name="itemsInfo">A dictionary that contains information about the items to be audited.</param>
         /// <param name="items">The items to be audited.</param>
         /// <param name="notes">Additional information for the action being audited.</param>
-        public static void QueueLogAuditAction(short action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes)
+        public void QueueLogAuditAction(short action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes)
         {
-            QueueBackgroundAction(() => AuditLogger.LogActions(action, applicationId, userIdentifier, itemsInfo, items, notes, false));
+            QueueBackgroundAction(() => AuditLogger.LogActions(action, applicationId, userIdentifier, itemsInfo, items, notes));
         }
 
         /// <summary>

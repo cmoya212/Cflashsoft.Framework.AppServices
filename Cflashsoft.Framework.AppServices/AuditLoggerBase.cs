@@ -11,37 +11,12 @@ namespace Cflashsoft.Framework.AppServices
     /// </summary>
     public abstract class AuditLoggerBase
     {
-        private AppContextBase _appContext = null;
-
-        /// <summary>
-        /// Shared application services context.
-        /// </summary>
-        public AppContextBase AppContext
-        {
-            get
-            {
-                return _appContext;
-            }
-            protected set
-            {
-                _appContext = value;
-            }
-        }
-
         /// <summary>
         /// Inititializes a new instance of the AuditLogger class.
         /// </summary>
         public AuditLoggerBase()
         {
 
-        }
-
-        /// <summary>
-        /// Inititializes a new instance of the AuditLogger class.
-        /// </summary>
-        public AuditLoggerBase(AppContextBase appContext)
-        {
-            _appContext = appContext;
         }
 
         /// <summary>
@@ -86,10 +61,9 @@ namespace Cflashsoft.Framework.AppServices
         /// <param name="itemsInfo">A dictionary that contains information about the items to be audited.</param>
         /// <param name="items">The items to be audited.</param>
         /// <param name="notes">Additional information for the action being audited.</param>
-        /// <param name="queueActions">Queue the logging in a background thread if possible. Note: this option can only be specified if this audit logger does not belong to an instance of AppContext.</param>
-        public void LogActions(AppAuditAction action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes, bool queueActions = false)
+        public void LogActions(AppAuditAction action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes)
         {
-            LogActions((short)action, applicationId, userIdentifier, itemsInfo, items, notes, queueActions);
+            LogActions((short)action, applicationId, userIdentifier, itemsInfo, items, notes);
         }
 
         /// <summary>
@@ -101,24 +75,15 @@ namespace Cflashsoft.Framework.AppServices
         /// <param name="itemsInfo">A dictionary that contains information about the items to be audited.</param>
         /// <param name="items">The items to be audited.</param>
         /// <param name="notes">Additional information for the action being audited.</param>
-        /// <param name="queueActions">Queue the logging in a background thread if possible. Note: this option can only be specified if this audit logger does not belong to an instance of AppContext.</param>
-        public void LogActions(short action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes, bool queueActions = false)
+        public void LogActions(short action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, IEnumerable<object> items, string notes)
         {
-            if (queueActions)
-            {
-                if (this.AppContext != null)
-                    throw new InvalidOperationException("When queueActions is specified, AppContext cannot be defined for this instance of the audit logger.");
-                //if (!object.ReferenceEquals(this, AppContextBase.AuditLogger))
-                //    throw new InvalidOperationException("When queueActions is specified this audit logger must be the AppContextBase static audit logger.");
-            }
-
             foreach (object item in items)
             {
-                LogAction(action, applicationId, userIdentifier, itemsInfo, item, notes, queueActions);
+                LogAction(action, applicationId, userIdentifier, itemsInfo, item, notes);
             }
         }
 
-        private void LogAction(short action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, object item, string notes, bool queueAction)
+        private void LogAction(short action, int applicationId, ItemIdentifier userIdentifier, IDictionary<Type, AppAuditItemInfo> itemsInfo, object item, string notes)
         {
             Type itemType = item.GetType();
 
@@ -126,10 +91,7 @@ namespace Cflashsoft.Framework.AppServices
             {
                 ItemIdentifier itemIdentifier = ItemIdentifier.FromObject(item, itemType, itemInfo.FieldName);
 
-                if (queueAction)
-                    AppContextBase.QueueBackgroundAction(() => AppContextBase.AuditLogger.LogAction(action, applicationId, userIdentifier.ItemId, userIdentifier.ItemGuid, userIdentifier.ItemInfo, itemInfo.ItemType, itemIdentifier.ItemId, itemIdentifier.ItemGuid, itemIdentifier.ItemInfo, notes));
-                else
-                    LogAction(action, applicationId, userIdentifier.ItemId, userIdentifier.ItemGuid, userIdentifier.ItemInfo, itemInfo.ItemType, itemIdentifier.ItemId, itemIdentifier.ItemGuid, itemIdentifier.ItemInfo, notes);
+                LogAction(action, applicationId, userIdentifier.ItemId, userIdentifier.ItemGuid, userIdentifier.ItemInfo, itemInfo.ItemType, itemIdentifier.ItemId, itemIdentifier.ItemGuid, itemIdentifier.ItemInfo, notes);
             }
         }
     }

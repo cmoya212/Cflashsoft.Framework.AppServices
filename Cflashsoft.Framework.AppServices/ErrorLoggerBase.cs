@@ -10,37 +10,12 @@ namespace Cflashsoft.Framework.AppServices
     /// </summary>
     public abstract class ErrorLoggerBase
     {
-        private AppContextBase _appContext = null;
-
-        /// <summary>
-        /// Shared application services context.
-        /// </summary>
-        public AppContextBase AppContext
-        {
-            get
-            {
-                return _appContext;
-            }
-            protected set
-            {
-                _appContext = value;
-            }
-        }
-
         /// <summary>
         /// Inititializes a new instance of the ErrorLogger class.
         /// </summary>
         public ErrorLoggerBase()
         {
 
-        }
-
-        /// <summary>
-        /// Inititializes a new instance of the ErrorLogger class.
-        /// </summary>
-        public ErrorLoggerBase(AppContextBase appContext)
-        {
-            _appContext = appContext;
         }
 
         /// <summary>

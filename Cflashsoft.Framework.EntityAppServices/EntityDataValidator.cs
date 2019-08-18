@@ -183,13 +183,13 @@ namespace Cflashsoft.Framework.EntityAppServices
             {
                 ItemIdentifier userIdentifier = new ItemIdentifier(contextPrincipal.UserInfo.Id, contextPrincipal.UserInfo.Oid, contextPrincipal.UserInfo.UserName);
 
-                AppContextBase.AuditLogger.LogActions(AppAuditAction.Delete, 0, userIdentifier, this.AuditTypes, dataContext.GetLastDeleted(), null);
-                AppContextBase.AuditLogger.LogActions(AppAuditAction.Add, 0, userIdentifier, this.AuditTypes, dataContext.GetLastAdded(), null);
-                AppContextBase.AuditLogger.LogActions(AppAuditAction.Modify, 0, userIdentifier, this.AuditTypes, dataContext.GetLastModified(), null);
+                appContext.AuditLogger.LogActions(AppAuditAction.Delete, 0, userIdentifier, this.AuditTypes, dataContext.GetLastDeleted(), null);
+                appContext.AuditLogger.LogActions(AppAuditAction.Add, 0, userIdentifier, this.AuditTypes, dataContext.GetLastAdded(), null);
+                appContext.AuditLogger.LogActions(AppAuditAction.Modify, 0, userIdentifier, this.AuditTypes, dataContext.GetLastModified(), null);
             }
             catch (Exception ex)
             {
-                AppContextBase.ErrorLogger.LogError(ex, "Could not complete logging of audit actions.", 0, 0, contextPrincipal.UserInfo.Id, contextPrincipal.UserInfo.Oid, contextPrincipal.UserInfo.UserName);
+                appContext.ErrorLogger.LogError(ex, "Could not complete logging of audit actions.", 0, 0, contextPrincipal.UserInfo.Id, contextPrincipal.UserInfo.Oid, contextPrincipal.UserInfo.UserName);
                 throw;
             }
         }
