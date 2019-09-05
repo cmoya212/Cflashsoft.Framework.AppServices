@@ -69,6 +69,11 @@ namespace Cflashsoft.Framework.EntityCoreAppServices
             //    this.Data.Configuration.ProxyCreationEnabled = enableProxyCreation.Value;
 
             _validator = validator;
+
+            IAppContextAware appContextAwareDataContext = this.Data as IAppContextAware;
+
+            if (appContextAwareDataContext != null)
+                appContextAwareDataContext.InitializeFromAppContext(appContext);
         }
 
         /// <summary>

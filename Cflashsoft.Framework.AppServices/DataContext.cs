@@ -51,6 +51,11 @@ namespace Cflashsoft.Framework.AppServices
         {
             this.AppContext = appContext;
             this.Data = new T();
+
+            IAppContextAware appContextAwareDataContext = this.Data as IAppContextAware;
+
+            if (appContextAwareDataContext != null)
+                appContextAwareDataContext.InitializeFromAppContext(appContext);
         }
     }
 }
