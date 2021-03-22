@@ -8,4 +8,4 @@ Business logic classes contain just business logic, are extraordinarly easy to m
 ## Documentation
 https://1drv.ms/w/s!AtUuwRmVvmd4g4YkWQT0SYfYnR7poQ
 ### Sample Project
-*Coming soon*
+*Coming soon* 
